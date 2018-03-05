@@ -75,7 +75,6 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
@@ -86,6 +85,7 @@ fabric.properties
 hs_err_pid*
 
 ### NetBeans ###
+nbproject/
 nbproject/private/
 build/
 nbbuild/
