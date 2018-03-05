@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dk.easv.bll.bot.monteCarloBot;
+package dk.easv.bll.bot;
 
-import UTTT.bll.bot.IBot;
-import UTTT.bll.field.IField;
-import UTTT.bll.game.IGameState;
-import UTTT.bll.move.IMove;
+
+import dk.easv.bll.bot.IBot;
+import dk.easv.bll.field.IField;
+import dk.easv.bll.game.IGameState;
+import dk.easv.bll.move.IMove;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,7 +49,12 @@ public class MonteCarloBot implements IBot{
     }
 
     private void fillResults(int player, IField field, List<IMove> myMoves) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //TODO fill the results list with simulations of wins and losses
+    }
+
+    @Override
+    public String getBotName() {
+        return "group 3 monte carlo bot";
     }
     
 }
