@@ -23,9 +23,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.DirectoryStream;
@@ -33,6 +30,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AppController implements Initializable{
     public JFXButton btnTrash;
@@ -71,25 +70,20 @@ public class AppController implements Initializable{
         try(DirectoryStream<Path> stream = Files.newDirectoryStream( dir, "*.java" )) {
             for (Path path : stream) {
                 String classPathAndName = "dk.easv.bll.bot."+getFilenameNoExtension(path);
-                // Klassen skal være på ClassPath for at dette virker...
                 URL[] urls = {path.toFile().toURI().toURL()};
                 ClassLoader cl = new URLClassLoader(urls);
                 Class clazz = cl.loadClass(classPathAndName);
                 if(!clazz.isInterface())
                 {
                     IBot bot = (IBot) clazz.newInstance();
-                //IBot bot = (IBot) Class.forName("dk.easv.bll.bot."+getFilenameNoExtension(path)).newInstance();
-                bots.add(bot);}
+                    bots.add(bot);
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } ;
+        }
+        catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(AppController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
         comboBotsLeft.setButtonCell(new CustomIBotListCell());
         comboBotsLeft.setCellFactory(p -> new CustomIBotListCell());
