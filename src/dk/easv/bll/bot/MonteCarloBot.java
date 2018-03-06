@@ -42,14 +42,20 @@ public class MonteCarloBot implements IBot {
         return getBestMove(state);
     }
     
+    
+    /**
+     * get the best moves when comparing tries and wins for every posibble posiition, if more have the same result 
+     * @param state
+     * @return 
+     */
     private IMove getBestMove(IGameState state) {
         //TODO find the best move from the results list
         List<Integer> bestMoves = new ArrayList<>();
-        int bestResult = results.get(0)[1] / results.get(0)[0];
+        double bestResult = results.get(0)[1] / results.get(0)[0];
         bestMoves.add(0);
         
         for (int i = 1; i < results.size(); i++) {
-            int thisResult = (results.get(0)[1] / results.get(0)[0]);
+            double thisResult = (results.get(0)[1] / results.get(0)[0]);
             //better
             if (thisResult > bestResult) {
                 bestMoves.clear();
@@ -64,11 +70,24 @@ public class MonteCarloBot implements IBot {
         return myMoves.get(bestMoves.get(selectRandom(bestMoves.size())));
     }
     
+    
+    /**
+     * get a random number from 0 to  max(exclusive)
+     * @param max int
+     * @return int 
+     */
     private int selectRandom(int max) {
         Random random = new Random();
         return random.nextInt(max);
     }
     
+    
+    /**
+     * fills the result list with wins losses and ties for some random games
+     * @param player
+     * @param field
+     * @param myMoves 
+     */
     private void fillResults(int player, IField field, List<IMove> myMoves) {
         searches = 0;
         long startTime = System.currentTimeMillis();
