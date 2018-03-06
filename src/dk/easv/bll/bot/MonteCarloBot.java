@@ -22,11 +22,12 @@ public class MonteCarloBot implements IBot {
     
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
-    private int MaxTime;
+    private final static int MAX_TIME_FOR_SEARCHING;
     private IGameState currentState;
+    private int searches = 0;
     
     public MonteCarloBot() {
-        MaxTime = 3000;//MaxSearchTimeInMilliseconds
+        MAX_TIME_FOR_SEARCHING = 3000;//MaxSearchTimeInMilliseconds
     }
     
     @Override
@@ -72,16 +73,15 @@ public class MonteCarloBot implements IBot {
     }
     
     private void fillResults(int player, IField field, List<IMove> myMoves) {
-        //TODO fill the results list with simulations of wins and losses
+        searches = 0;
         long startTime = System.currentTimeMillis();
         
         int i = 0;
         
-        while (System.currentTimeMillis() < (startTime + MaxTime)) {
+        while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
             
             IMove testMove = myMoves.get(i);
 
-            //TODO test if the move played with random moves will be win or lose or draw
             GameManager testGameManager = new GameManager(new GameState(currentState));
             
             testGameManager.UpdateGame(testMove);
@@ -93,6 +93,8 @@ public class MonteCarloBot implements IBot {
                 IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
                 
                 testGameManager.UpdateGame(chossenMove);
+                
+                
             }
             Integer[] result;
             try {
@@ -123,7 +125,9 @@ public class MonteCarloBot implements IBot {
             if (i >= myMoves.size()) {
                 i = 0;
             }
+            searches++;
         }
+        System.out.println(searches + " random searches where made");
     }
     
     @Override
