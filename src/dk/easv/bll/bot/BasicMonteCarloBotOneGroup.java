@@ -18,7 +18,7 @@ import java.util.Random;
  *
  * @author janvanzetten
  */
-public class BasicMonteCarloBot implements IBot {
+public class BasicMonteCarloBotOneGroup implements IBot {
     
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
@@ -61,11 +61,11 @@ public class BasicMonteCarloBot implements IBot {
                 bestMoves.clear();
                 bestMoves.add(i);
                 bestResult = thisResult;
-                System.out.println("better");
+                //System.out.println("better");
             } //the same
             else if (thisResult == bestResult) {
                 bestMoves.add(i);
-                System.out.println("same");
+                //System.out.println("same");
             }
         }
         
