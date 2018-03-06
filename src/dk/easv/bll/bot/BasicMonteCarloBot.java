@@ -150,7 +150,7 @@ public class BasicMonteCarloBot implements IBot {
     
     @Override
     public String getBotName() {
-        return "Group 3 monte carlo bot";
+        return "Waste schredder";
     }
     
 }
