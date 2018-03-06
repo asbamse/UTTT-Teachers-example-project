@@ -18,7 +18,7 @@ import java.util.Random;
  *
  * @author janvanzetten
  */
-public class MonteCarloBot implements IBot {
+public class BasicMonteCarloBot implements IBot {
     
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
@@ -44,7 +44,7 @@ public class MonteCarloBot implements IBot {
     
     
     /**
-     * get the best moves when comparing tries and wins for every posibble posiition, if more have the same result 
+     * get the best moves when comparing tries and wins for every posibble posiition, if more have the same result then pick random from the best results
      * @param state
      * @return 
      */
@@ -55,7 +55,7 @@ public class MonteCarloBot implements IBot {
         bestMoves.add(0);
         
         for (int i = 1; i < results.size(); i++) {
-            double thisResult = (results.get(0)[1] / results.get(0)[0]);
+            double thisResult = (results.get(i)[1] / results.get(i)[0]);
             //better
             if (thisResult > bestResult) {
                 bestMoves.clear();
