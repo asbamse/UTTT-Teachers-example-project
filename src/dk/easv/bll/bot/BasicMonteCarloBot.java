@@ -51,19 +51,21 @@ public class BasicMonteCarloBot implements IBot {
     private IMove getBestMove(IGameState state) {
         //TODO find the best move from the results list
         List<Integer> bestMoves = new ArrayList<>();
-        double bestResult = results.get(0)[1] / results.get(0)[0];
+        double bestResult = ((results.get(0)[1]*1.0) / (results.get(0)[0]*1.0));
         bestMoves.add(0);
         
         for (int i = 1; i < results.size(); i++) {
-            double thisResult = (results.get(i)[1] / results.get(i)[0]);
+            double thisResult = ((results.get(i)[1]*1.0) / (results.get(i)[0]*1.0));
             //better
             if (thisResult > bestResult) {
                 bestMoves.clear();
                 bestMoves.add(i);
                 bestResult = thisResult;
+                System.out.println("better");
             } //the same
             else if (thisResult == bestResult) {
                 bestMoves.add(i);
+                System.out.println("same");
             }
         }
         
