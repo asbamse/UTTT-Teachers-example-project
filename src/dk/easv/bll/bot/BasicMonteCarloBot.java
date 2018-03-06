@@ -126,7 +126,7 @@ public class BasicMonteCarloBot implements IBot {
             result[0]++;
             
             if (testGameManager.getGameOver() != GameManager.GameOverState.Tie) {
-                if (testGameManager.getCurrentPlayer() == player) {
+                if ((testGameManager.getCurrentPlayer()+1) %2 == player) {
                     result[1]++;
                 } else {
                     result[1]--;
