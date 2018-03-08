@@ -22,7 +22,8 @@ import javafx.concurrent.Task;
  *
  * @author janvanzetten
  */
-public class BasicMultiMonteCarloBotOneGroup implements IBot {
+public class BasicMultiMonteCarloBotOneGroup implements IBot
+{
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
@@ -30,7 +31,8 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
     private IGameState currentState;
 
     @Override
-    public IMove doMove(IGameState state) {
+    public IMove doMove(IGameState state)
+    {
         int player = state.getMoveNumber() % 2;
 
         currentState = new GameState(state);
@@ -52,20 +54,24 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
      * @param state
      * @return
      */
-    private IMove getBestMove(IGameState state) {
+    private IMove getBestMove(IGameState state)
+    {
         List<Integer> bestMoves = new ArrayList<>();
         double bestResult = ((results.get(0)[1] * 1.0) / (results.get(0)[0] * 1.0));
         bestMoves.add(0);
 
-        for (int i = 1; i < results.size(); i++) {
+        for (int i = 1; i < results.size(); i++)
+        {
             double thisResult = ((results.get(i)[1] * 1.0) / (results.get(i)[0] * 1.0));
             //better
-            if (thisResult > bestResult) {
+            if (thisResult > bestResult)
+            {
                 bestMoves.clear();
                 bestMoves.add(i);
                 bestResult = thisResult;
             } //the same
-            else if (thisResult == bestResult) {
+            else if (thisResult == bestResult)
+            {
                 bestMoves.add(i);
             }
         }
@@ -79,7 +85,8 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
      * @param max int
      * @return int
      */
-    private int selectRandom(int max) {
+    private int selectRandom(int max)
+    {
         Random random = new Random();
         return random.nextInt(max);
     }
@@ -91,32 +98,44 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
      * @param field
      * @param myMoves
      */
-    private void fillResults(int player, IField field, List<IMove> myMoves) {
+    private void fillResults(int player, IField field, List<IMove> myMoves)
+    {
         List<Task> tasks = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
         tasks.clear();
 
-        for (int i = 0; i < myMoves.size(); i++) {
+        for (int i = 0; i < myMoves.size(); i++)
+        {
             tasks.add(makeTask(i, player, startTime));
         }
 
-        for (Task task : tasks) {
+        results = new ArrayList<>(tasks.size());
+
+        for (Task task : tasks)
+        {
             new Thread(task).start();
         }
 
-        for (int j = 0; j < tasks.size(); j++) {
-            try {
+        for (int j = 0; j < tasks.size(); j++)
+        {
+            try
+            {
 
                 Integer[] result = (Integer[]) tasks.get(j).get();
 
-                try {
+                try
+                {
                     results.set(j, result);
-                } catch (IndexOutOfBoundsException ex) {
+                }
+                catch (IndexOutOfBoundsException ex)
+                {
                     results.add(j, result);
                 }
 
-            } catch (InterruptedException | ExecutionException ex) {
+            }
+            catch (InterruptedException | ExecutionException ex)
+            {
                 Logger.getLogger(BasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -125,7 +144,8 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
     }
 
     @Override
-    public String getBotName() {
+    public String getBotName()
+    {
         return "Waste schredder Multi 2000";
     }
 
@@ -136,23 +156,30 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
      * @param player1
      * @return
      */
-    private Task<Integer[]> makeTask(int i, int player1, long startTime) {
+    private Task<Integer[]> makeTask(int i, int player1, long startTime)
+    {
         final int myIndex = i;
         final int player = player1;
-        Task<Integer[]> task = new Task<Integer[]>() {
+        Task<Integer[]> task = new Task<Integer[]>()
+        {
             @Override
-            protected Integer[] call() throws Exception {
+            protected Integer[] call() throws Exception
+            {
 
                 Integer[] result;
-                try {
+                try
+                {
                     result = results.get(myIndex);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     result = new Integer[2];
                     result[0] = 0;
                     result[1] = 0;
                 }
 
-                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
+                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING))
+                {
                     IMove testMove = myMoves.get(myIndex);
 
                     GameManager testGameManager = new GameManager(new GameState(currentState));
@@ -160,7 +187,8 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
                     testGameManager.UpdateGame(testMove);
 
                     //while game is not gameover take a random move of the avalible moves
-                    while (testGameManager.getGameOver() == GameManager.GameOverState.Active) {
+                    while (testGameManager.getGameOver() == GameManager.GameOverState.Active)
+                    {
                         List<IMove> avalibleMoves = testGameManager.getCurrentState().getField().getAvailableMoves();
 
                         IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
@@ -171,13 +199,17 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
 
                     result[0]++;
 
-                    if (testGameManager.getGameOver() != GameManager.GameOverState.Tie) {
-                        if ((((testGameManager.getCurrentState().getMoveNumber() + 1) % 2)) == player) {  //check this i am not sure it this is right
+                    if (testGameManager.getGameOver() != GameManager.GameOverState.Tie)
+                    {
+                        if ((((testGameManager.getCurrentState().getMoveNumber() + 1) % 2)) == player)
+                        {  //check this i am not sure it this is right
                             result[1]++;
-                        } else {
+                        }
+                        else
+                        {
                             result[1]--;
                         }
-                    } 
+                    }
                 }
                 return result;
             }
