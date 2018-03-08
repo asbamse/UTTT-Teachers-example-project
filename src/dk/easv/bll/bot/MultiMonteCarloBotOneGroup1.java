@@ -26,7 +26,7 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
-    private final static int MAX_TIME_FOR_SEARCHING = 998;
+    private int MAX_TIME_FOR_SEARCHING;
     private IGameState currentState;
     private int searches = 0;
 
@@ -35,7 +35,7 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
         int player = state.getMoveNumber() % 2;
 
         currentState = new GameState(state);
-
+        MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 2);
         myMoves = state.getField().getAvailableMoves();
 
         results = new ArrayList<>();
