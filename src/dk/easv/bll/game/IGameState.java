@@ -16,4 +16,6 @@ public interface IGameState {
     int getRoundNumber();
     void setRoundNumber(int roundNumber);
 
+    int getTimePerMove();
+    void setTimePerMove(int milliSeconds);
 }

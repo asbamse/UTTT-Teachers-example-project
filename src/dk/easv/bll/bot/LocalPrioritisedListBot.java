@@ -5,14 +5,12 @@ import dk.easv.bll.game.IGameState;
 import dk.easv.bll.move.IMove;
 import dk.easv.bll.move.Move;
 
-import java.util.List;
-import java.util.Random;
 
 public class LocalPrioritisedListBot implements IBot {
 
     private static final String BOTNAME = "Local Prio ListBot";
     // Moves {row, col} in order of preferences. {0, 0} at top-left corner
-    private int[][] preferredMoves = {
+    protected int[][] preferredMoves = {
             {1, 1}, //Center
             {0, 0}, {2, 2}, {0, 2}, {2, 0},  //Corners ordered across
             {0, 1}, {2, 1}, {1, 0}, {1, 2}}; //Outer Middles ordered across
