@@ -22,7 +22,7 @@ import javafx.concurrent.Task;
  *
  * @author janvanzetten
  */
-public class BasicMultiMonteCarloBotOneGroup implements IBot {
+public class BasicMultiMonteCarloBotOneGroup1 implements IBot {
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
@@ -70,7 +70,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
                 bestMoves.add(i);
             }
         }
-        
+
         return myMoves.get(bestMoves.get(selectRandom(bestMoves.size())));
     }
 
@@ -97,39 +97,41 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
         List<Task> tasks = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
-        tasks.clear();
+        while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
+            tasks.clear();
 
-        for (int i = 0; i < myMoves.size(); i++) {
-            tasks.add(makeTask(i, player, startTime));
-        }
-
-        for (Task task : tasks) {
-            new Thread(task).start();
-        }
-
-        for (int j = 0; j < tasks.size(); j++) {
-            try {
-
-                Integer[] result = (Integer[]) tasks.get(j).get();
-
-                try {
-                    results.set(j, result);
-                } catch (IndexOutOfBoundsException ex) {
-                    results.add(j, result);
-                }
-
-            } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(BasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
+            for (int i = 0; i < myMoves.size(); i++) {
+                tasks.add(makeTask(i, player, startTime));
             }
 
+            for (Task task : tasks) {
+                new Thread(task).start();
+            }
+
+            for (int j = 0; j < tasks.size(); j++) {
+                try {
+
+                    Integer[] result = (Integer[]) tasks.get(j).get();
+
+                    try {
+                        results.set(j, result);
+                    } catch (IndexOutOfBoundsException ex) {
+                        results.add(j, result);
+                    }
+
+                } catch (InterruptedException | ExecutionException ex) {
+                    Logger.getLogger(BasicMultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
         }
-        System.out.println(searches + " random multi searches where made");
+        System.out.println(searches + " random even searches where made");
 
     }
 
     @Override
     public String getBotName() {
-        return "Waste schredder Multi 2000";
+        return "Waste schredder Multi 2000 even";
     }
 
     /**
@@ -155,7 +157,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
                     result[1] = 0;
                 }
 
-                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
+                
                     IMove testMove = myMoves.get(myIndex);
 
                     GameManager testGameManager = new GameManager(new GameState(currentState));
@@ -180,9 +182,9 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot {
                         } else {
                             result[1]--;
                         }
-                    } 
+                    }
                     searches++;
-                }
+                
                 
                 return result;
             }

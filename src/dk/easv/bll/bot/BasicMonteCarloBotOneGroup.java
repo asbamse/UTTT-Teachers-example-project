@@ -24,7 +24,7 @@ public class BasicMonteCarloBotOneGroup implements IBot {
     private List<IMove> myMoves;
     private int MAX_TIME_FOR_SEARCHING;
     private IGameState currentState;
-    private int searches = 0;
+    //private int searches = 0;
     
     
     @Override
@@ -91,7 +91,7 @@ public class BasicMonteCarloBotOneGroup implements IBot {
      * @param myMoves 
      */
     private void fillResults(int player, IField field, List<IMove> myMoves) {
-        searches = 0;
+        //searches = 0;
         long startTime = System.currentTimeMillis();
         
         int i = 0;
@@ -143,9 +143,9 @@ public class BasicMonteCarloBotOneGroup implements IBot {
             if (i >= myMoves.size()) {
                 i = 0;
             }
-            searches++;
+            //searches++;
         }
-        System.out.println(searches + " random searches where made");
+        //System.out.println(searches + " random searches where made");
     }
     
     @Override
