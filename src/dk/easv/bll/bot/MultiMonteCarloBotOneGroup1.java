@@ -98,45 +98,36 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
     private void fillResults(int player, IField field, List<IMove> myMoves) {
         searches = 0;
         List<Task> tasks = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+
+        tasks.clear();
+
         for (int i = 0; i < myMoves.size(); i++) {
-            tasks.add(makeTask(i, player));
+            tasks.add(makeTask(i, player, startTime));
         }
 
-        long startTime = System.currentTimeMillis();
-        
-        while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
-            tasks.clear();
-            
-            for (int i = 0; i < myMoves.size(); i++) {
-                tasks.add(makeTask(i, player));
-            }
-            
-            
-            for (Task task : tasks) {
-                task.run();
-            }
+        for (Task task : tasks) {
+            new Thread(task).start();
+        }
 
-            for (int j = 0; j < tasks.size(); j++) {
+        for (int j = 0; j < tasks.size(); j++) {
+            try {
+
+                Integer[] result = (Integer[]) tasks.get(j).get();
+
                 try {
-
-                    Integer[] result = (Integer[]) tasks.get(j).get();
-
-                    try {
-                        results.set(j, result);
-                    } catch (IndexOutOfBoundsException ex) {
-                        results.add(j, result);
-                    }
-
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(MultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
+                    results.set(j, result);
+                } catch (IndexOutOfBoundsException ex) {
+                    results.add(j, result);
                 }
 
+            } catch (InterruptedException | ExecutionException ex) {
+                Logger.getLogger(MultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-         System.out.println(searches + " random multi searches where made");
+
+        System.out.println(searches + " random multi searches where made");
 
     }
 
@@ -152,27 +143,13 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
      * @param player1
      * @return
      */
-    private Task<Integer[]> makeTask(int i, int player1) {
+    private Task<Integer[]> makeTask(int i, int player1, long startTime) {
         final int myIndex = i;
         final int player = player1;
         Task<Integer[]> task = new Task<Integer[]>() {
             @Override
             protected Integer[] call() throws Exception {
-                IMove testMove = myMoves.get(myIndex);
 
-                GameManager testGameManager = new GameManager(new GameState(currentState));
-
-                testGameManager.UpdateGame(testMove);
-
-                //while game is not gameover take a random move of the avalible moves
-                while (testGameManager.getGameOver() == GameManager.GameOverState.Active) {
-                    List<IMove> avalibleMoves = testGameManager.getCurrentState().getField().getAvailableMoves();
-
-                    IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
-
-                    testGameManager.UpdateGame(chossenMove);
-
-                }
                 Integer[] result;
                 try {
                     result = results.get(myIndex);
@@ -182,18 +159,37 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
                     result[1] = 0;
                 }
 
-                result[0]++;
+                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
+                    IMove testMove = myMoves.get(myIndex);
 
-                if (testGameManager.getGameOver() != GameManager.GameOverState.Tie) {
-                    if ((((testGameManager.getCurrentState().getMoveNumber() + 1) % 2)) == player) {  //check this i am not sure it this is right
-                        result[1]++;
-                    } else {
-                        result[1]--;
+                    GameManager testGameManager = new GameManager(new GameState(currentState));
+
+                    testGameManager.UpdateGame(testMove);
+
+                    //while game is not gameover take a random move of the avalible moves
+                    while (testGameManager.getGameOver() == GameManager.GameOverState.Active) {
+                        List<IMove> avalibleMoves = testGameManager.getCurrentState().getField().getAvailableMoves();
+
+                        IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
+
+                        testGameManager.UpdateGame(chossenMove);
+
                     }
-                }
-                 searches++;
-                return result;
 
+                    result[0]++;
+
+                    if (testGameManager.getGameOver() != GameManager.GameOverState.Tie) {
+                        if ((((testGameManager.getCurrentState().getMoveNumber() + 1) % 2)) == player) {  //check this i am not sure it this is right
+                            result[1]++;
+                        } else {
+                            result[1]--;
+                        }
+                    }
+                    searches++;
+                    //System.out.println(Thread.currentThread().getName());
+
+                }
+                return result;
             }
         };
 
