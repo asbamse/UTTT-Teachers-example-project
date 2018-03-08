@@ -35,7 +35,7 @@ public class BasicMonteCarloBotOneGroup implements IBot {
         MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 2);
         myMoves = state.getField().getAvailableMoves();
         
-        results = new ArrayList<>();
+        results = new ArrayList<>(myMoves.size());
         
         fillResults(player, state.getField(), myMoves);
         
@@ -145,8 +145,7 @@ public class BasicMonteCarloBotOneGroup implements IBot {
             }
             //searches++;
         }
-        System.out.println(
-                " random searches where made");
+        //System.out.println( " random searches where made");
     }
     
     @Override

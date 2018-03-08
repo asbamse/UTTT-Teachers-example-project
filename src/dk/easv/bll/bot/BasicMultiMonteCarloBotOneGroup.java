@@ -111,13 +111,13 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             tasks.add(makeTask(i, player, startTime));
         }
 
-        results = new ArrayList<>(tasks.size());
+        
 
         for (Task task : tasks)
         {
             new Thread(task).start();
         }
-
+        results = new ArrayList<>(tasks.size());
         for (int j = 0; j < tasks.size(); j++)
         {
             try
@@ -131,6 +131,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
                 }
                 catch (IndexOutOfBoundsException ex)
                 {
+                    System.out.println("was run");
                     results.add(j, result);
                 }
 
@@ -141,7 +142,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             }
 
         }
-        System.out.println(searches + " random multi searches where made");
+        //ystem.out.println(searches + " random multi searches where made");
 
     }
 
