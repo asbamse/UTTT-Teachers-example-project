@@ -7,10 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class Main extends Application {
 
@@ -18,7 +14,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/dk/easv/gui/App.fxml"));
         primaryStage.setTitle("Ultimate Tic Tac Toe - Diamonds and Trash");
-        primaryStage.setScene(new Scene(root, 900, 600));
+        primaryStage.setScene(new Scene(root, 900, 700));
         primaryStage.setTitle("Diamonds vs Trash");
         primaryStage.show();
     }

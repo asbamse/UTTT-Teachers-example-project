@@ -4,9 +4,6 @@ import dk.easv.bll.bot.IBot;
 import dk.easv.bll.field.IField;
 import dk.easv.bll.move.IMove;
 import dk.easv.bll.move.Move;
-import javafx.animation.TranslateTransition;
-import javafx.scene.control.Button;
-import javafx.util.Duration;
 
 /**
  * This is a proposed GameManager for Ultimate Tic-Tac-Toe,
@@ -83,7 +80,6 @@ public class GameManager {
         this.currentState = currentState;
         playerGoesFirst=humanPlaysFirst;
         mode = GameMode.HumanVsBot;
-
         this.bot = bot;
     }
     
@@ -109,16 +105,10 @@ public class GameManager {
      */
     public Boolean UpdateGame(IMove move)
     {
-        //Verify the new move
         if(!VerifyMoveLegality(move)) 
-        { 
-            return false; 
-        }
+            return false;
         
-        //Update the currentState
         UpdateBoard(move);
-        
-        //Update currentPlayer
         currentPlayer = (currentPlayer + 1) % 2;
         
         return true;
@@ -136,12 +126,12 @@ public class GameManager {
         //Check if player is bot, if so, get bot input and update the state based on that.
         if(mode == GameMode.HumanVsBot && currentPlayer == 1 && playerGoesFirst)
         {
-             IMove botMove = bot.doMove(currentState);
+             IMove botMove = bot.doMove(new GameState(currentState));
              return UpdateGame(botMove);
         }
         else if(mode == GameMode.HumanVsBot && !playerGoesFirst && currentPlayer == 0)
         {
-            IMove botMove = bot.doMove(currentState);
+            IMove botMove = bot.doMove(new GameState(currentState));
             return UpdateGame(botMove);
         }
         
@@ -155,7 +145,7 @@ public class GameManager {
             assert(bot != null);
             assert(bot2 != null);
 
-            IMove botMove = currentPlayer == 0 ? bot.doMove(currentState) : bot2.doMove(currentState);
+            IMove botMove = currentPlayer == 0 ? bot.doMove(new GameState(currentState)) : bot2.doMove(new GameState(currentState));
 
             return UpdateGame(botMove);
         }
@@ -169,7 +159,10 @@ public class GameManager {
         IField field = currentState.getField();
         boolean isValid=field.isInActiveMicroboard(move.getX(), move.getY());
 
-        if(!field.getBoard()[move.getX()][move.getY()].equals(IField.EMPTY_FIELD))
+        if(isValid && (move.getX() < 0 || 9 <= move.getX())) isValid = false;
+        if(isValid && (move.getY() < 0 || 9 <= move.getY())) isValid = false;
+
+        if(isValid && !field.getBoard()[move.getX()][move.getY()].equals(IField.EMPTY_FIELD))
             isValid=false;
 
         return isValid;
@@ -196,12 +189,11 @@ public class GameManager {
 
             String[][] board = getCurrentState().getField().getBoard();
 
-            if(isWin(board,move, ""+currentPlayer)) {
+            if(isWin(board,move, ""+currentPlayer))
                 macroBoard[macroX][macroY] = currentPlayer + "";
-            }else if(isTie(board,move)) {
+            else if(isTie(board,move))
                 macroBoard[macroX][macroY] = "TIE";
-            }
-
+            
             //Check macro win
             if(isWin(macroBoard,new Move(macroX,macroY), ""+currentPlayer))
                 gameOver = GameOverState.Win;
@@ -284,7 +276,6 @@ public class GameManager {
         int yTrans = move.getY()%3;
 
         if(macroBoard[xTrans][yTrans].equals(IField.EMPTY_FIELD))
-            // Set field to avail.
             macroBoard[xTrans][yTrans] = IField.AVAILABLE_FIELD;
         else {
             // Field is already won, set all fields not won to avail.
@@ -294,7 +285,5 @@ public class GameManager {
                         macroBoard[i][k] = IField.AVAILABLE_FIELD;
                 }
         }
-
-
     }
 }

@@ -40,7 +40,12 @@
 .game-font{
     -fx-font-family: 'Love Ya Like A Sister', cursive;
 }
-
+.winner-text{
+    -fx-background-color: rgba(73, 117, 215, 0.18);
+    -fx-font-size: 45px;
+    -fx-text-fill: lightgoldenrodyellow;
+    -fx-font-family: 'Love Ya Like A Sister', cursive;
+}
 .root{
     -icons-color: white;
     -fx-background-color: rgb(230, 239, 255);
@@ -60,6 +65,10 @@
     -icons-color: lightgoldenrodyellow;
 }
 
+.stat-items{
+    -fx-text-fill: lightgoldenrodyellow;
+}
+
 .empty{
 
 }
@@ -71,7 +80,7 @@
     -fx-background-color: green;
 }
 .playerTIE{
-    -fx-background-color: rgb(206, 225, 242 );
+    -fx-background-color: rgb(77,102,204);
 }
 .highlight
 {

@@ -7,6 +7,7 @@ public class GameState implements IGameState{
     IField field;
     int moveNumber;
     int roundNumber;
+    int timePerMove = 1000; //1000ms default value, can be changes depending on game specifics.
 
     public GameState(){
         field = new Field();
@@ -46,5 +47,17 @@ public class GameState implements IGameState{
     @Override
     public void setRoundNumber(int roundNumber) {
         this.roundNumber = roundNumber;
+    }
+
+    @Override
+    public int getTimePerMove()
+    {
+        return this.timePerMove;
+    }
+
+    @Override
+    public void setTimePerMove(int milliSeconds)
+    {
+        this.timePerMove = milliSeconds;
     }
 }
