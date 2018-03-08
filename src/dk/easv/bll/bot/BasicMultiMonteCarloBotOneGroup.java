@@ -22,7 +22,7 @@ import javafx.concurrent.Task;
  *
  * @author janvanzetten
  */
-public class MultiMonteCarloBotOneGroup1 implements IBot {
+public class BasicMultiMonteCarloBotOneGroup implements IBot {
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
@@ -117,7 +117,7 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
                 }
 
             } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(MultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
