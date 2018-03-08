@@ -28,7 +28,6 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
     private List<IMove> myMoves;
     private int MAX_TIME_FOR_SEARCHING;
     private IGameState currentState;
-    private int searches = 0;
 
     @Override
     public IMove doMove(IGameState state) {
@@ -54,7 +53,6 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
      * @return
      */
     private IMove getBestMove(IGameState state) {
-        //TODO find the best move from the results list
         List<Integer> bestMoves = new ArrayList<>();
         double bestResult = ((results.get(0)[1] * 1.0) / (results.get(0)[0] * 1.0));
         bestMoves.add(0);
@@ -66,11 +64,9 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
                 bestMoves.clear();
                 bestMoves.add(i);
                 bestResult = thisResult;
-                //System.out.println("better");
             } //the same
             else if (thisResult == bestResult) {
                 bestMoves.add(i);
-                //System.out.println("same");
             }
         }
 
@@ -96,7 +92,6 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
      * @param myMoves
      */
     private void fillResults(int player, IField field, List<IMove> myMoves) {
-        searches = 0;
         List<Task> tasks = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
@@ -126,8 +121,6 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
             }
 
         }
-
-        System.out.println(searches + " random multi searches where made");
 
     }
 
@@ -184,10 +177,7 @@ public class MultiMonteCarloBotOneGroup1 implements IBot {
                         } else {
                             result[1]--;
                         }
-                    }
-                    searches++;
-                    //System.out.println(Thread.currentThread().getName());
-
+                    } 
                 }
                 return result;
             }
