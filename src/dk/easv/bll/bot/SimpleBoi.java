@@ -11,22 +11,24 @@ import java.util.Random;
 public class SimpleBoi implements IBot
 {
     private static final String BOTNAME = "Some Simple Boi";
+
+    private final int SCORE_SEND_EMPTY;
+    private final int SCORE_SEND_WANTED_FIELD_EMPTY;
+    private final int SCORE_SEND_FINISHED;
+    private final int SCORE_SEND_MACRO_LOSE;
+    private final int SCORE_SEND_MICRO_LOSE;
+    private final int SCORE_BLOCKING_LOSE;
+    private final int SCORE_MACRO_WIN;
+    private final int SCORE_MICRO_WIN;
+    private final int SCORE_TWO_IN_ROW;
+    private final int SCORE_FIRST;
+    private final int SCORE_SECOND;
+    private final int SCORE_THIRD;
+
     private Random rand = new Random();
 
     private class PreferredMove
     {
-        private final int SCORE_SEND_EMPTY = 2;
-        private final int SCORE_SEND_WANTED_FIELD_EMPTY = 2;
-        private final int SCORE_SEND_FINISHED = -4;
-        private final int SCORE_SEND_MACRO_LOSE = -800;
-        private final int SCORE_SEND_MICRO_LOSE = -8;
-        private final int SCORE_BLOCKING_LOSE = 2;
-        private final int SCORE_MACRO_WIN = 5000;
-        private final int SCORE_MICRO_WIN = 5;
-        private final int SCORE_TWO_IN_ROW = 1;
-        private final int SCORE_FIRST = 3;
-        private final int SCORE_SECOND = 2;
-        private final int SCORE_THIRD = 1;
         private final int[][] PREFERRED_POSITION_FIRST =
         {
             {
@@ -395,6 +397,30 @@ public class SimpleBoi implements IBot
             }
             return true;
         }
+    }
+
+    public SimpleBoi()
+    {
+        this(1, 2, -6, -10, 4, 8, 2, 2, 1, 1);
+    }
+
+    public SimpleBoi(int scoreSendEmpty, int scoreSendWantedFieldEmpty,
+            int scoreSendFinished, int scoreSendMicroLose,
+            int scoreBlockingLose, int scoreMicroWin,
+            int scoreTwoInRow, int scoreFirst, int scoreSecond, int scoreThird)
+    {
+        SCORE_SEND_EMPTY = scoreSendEmpty;
+        SCORE_SEND_WANTED_FIELD_EMPTY = scoreSendWantedFieldEmpty;
+        SCORE_SEND_FINISHED = scoreSendFinished;
+        SCORE_SEND_MACRO_LOSE = -1000;
+        SCORE_SEND_MICRO_LOSE = scoreSendMicroLose;
+        SCORE_BLOCKING_LOSE = scoreBlockingLose;
+        SCORE_MACRO_WIN = 5000;
+        SCORE_MICRO_WIN = scoreMicroWin;
+        SCORE_TWO_IN_ROW = scoreTwoInRow;
+        SCORE_FIRST = scoreFirst;
+        SCORE_SECOND = scoreSecond;
+        SCORE_THIRD = scoreThird;
     }
 
     /**
