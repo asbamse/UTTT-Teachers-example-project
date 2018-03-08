@@ -22,15 +22,18 @@ import javafx.concurrent.Task;
  *
  * @author janvanzetten
  */
-public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
+public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
+{
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
     private List<IMove> myMoves;
     private int MAX_TIME_FOR_SEARCHING;
     private IGameState currentState;
+    private int searches = 0;
 
     @Override
-    public IMove doMove(IGameState state) {
+    public IMove doMove(IGameState state)
+    {
         int player = state.getMoveNumber() % 2;
 
         currentState = new GameState(state);
@@ -52,24 +55,28 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
      * @param state
      * @return
      */
-    private IMove getBestMove(IGameState state) {
+    private IMove getBestMove(IGameState state)
+    {
         List<Integer> bestMoves = new ArrayList<>();
         double bestResult = ((results.get(0)[1] * 1.0) / (results.get(0)[0] * 1.0));
         bestMoves.add(0);
 
-        for (int i = 1; i < results.size(); i++) {
+        for (int i = 1; i < results.size(); i++)
+        {
             double thisResult = ((results.get(i)[1] * 1.0) / (results.get(i)[0] * 1.0));
             //better
-            if (thisResult > bestResult) {
+            if (thisResult > bestResult)
+            {
                 bestMoves.clear();
                 bestMoves.add(i);
                 bestResult = thisResult;
             } //the same
-            else if (thisResult == bestResult) {
+            else if (thisResult == bestResult)
+            {
                 bestMoves.add(i);
             }
         }
-
+        
         return myMoves.get(bestMoves.get(selectRandom(bestMoves.size())));
     }
 
@@ -79,7 +86,8 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
      * @param max int
      * @return int
      */
-    private int selectRandom(int max) {
+    private int selectRandom(int max)
+    {
         Random random = new Random();
         return random.nextInt(max);
     }
@@ -92,76 +100,55 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
      * @param myMoves
      */
     private void fillResults(int player, IField field, List<IMove> myMoves) {
+        searches = 0;
         List<Task> tasks = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
-        if (myMoves.size() > 9) {
-            MAX_TIME_FOR_SEARCHING = MAX_TIME_FOR_SEARCHING / 2;
-        }
+        tasks.clear();
 
-        for (int i = 0; i < myMoves.size(); i++) {
+        for (int i = 0; i < myMoves.size(); i++)
+        {
             tasks.add(makeTask(i, player, startTime));
         }
 
-        for (Task task : tasks) {
+        results = new ArrayList<>(tasks.size());
+
+        for (Task task : tasks)
+        {
             new Thread(task).start();
         }
 
-        for (int j = 0; j < tasks.size(); j++) {
-            try {
+        for (int j = 0; j < tasks.size(); j++)
+        {
+            try
+            {
 
                 Integer[] result = (Integer[]) tasks.get(j).get();
 
-                try {
+                try
+                {
                     results.set(j, result);
-                } catch (IndexOutOfBoundsException ex) {
+                }
+                catch (IndexOutOfBoundsException ex)
+                {
                     results.add(j, result);
                 }
 
-            } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(lessBasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (InterruptedException | ExecutionException ex)
+            {
+                Logger.getLogger(BasicMultiMonteCarloBotOneGroupWithBadNodeTest.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-
-        List<Integer> betterMoves = new ArrayList<>();
-
-        if (myMoves.size() > 9) {
-            for (int i = 0; i < myMoves.size(); i++) {
-                if ((results.get(i)[1] * 1.0) / (results.get(i)[0] * 1.0) > 0) {
-                    betterMoves.add(i);
-                }
-                
-            }
-            tasks.clear();
-            for (int i = 0; i < betterMoves.size(); i++) {
-                tasks.add(makeTask(betterMoves.get(i), player, startTime));
-            }
-
-            for (Task task : tasks) {
-                new Thread(task).start();
-            }
-
-            for (int j = 0; j < tasks.size(); j++) {
-                try {
-
-                    Integer[] result = (Integer[]) tasks.get(j).get();
-
-                    results.set(betterMoves.get(j), result);
-                    
-
-                } catch (InterruptedException | ExecutionException ex) {
-                    Logger.getLogger(lessBasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        }
+        System.out.println(searches + " random multi searches where made");
 
     }
 
     @Override
-    public String getBotName() {
-        return "Waste schredder Multi 2000 focus";
+    public String getBotName()
+    {
+        return "Waste schredder Multi 2000+";
     }
 
     /**
@@ -171,23 +158,38 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
      * @param player1
      * @return
      */
-    private Task<Integer[]> makeTask(int i, int player1, long startTime) {
+    private Task<Integer[]> makeTask(int i, int player1, long startTime)
+    {
         final int myIndex = i;
         final int player = player1;
-        Task<Integer[]> task = new Task<Integer[]>() {
+        Task<Integer[]> task;
+        task = new Task<Integer[]>()
+        {
             @Override
-            protected Integer[] call() throws Exception {
+            protected Integer[] call() throws Exception
+            {
 
                 Integer[] result;
-                try {
+                try
+                {
                     result = results.get(myIndex);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     result = new Integer[2];
                     result[0] = 0;
                     result[1] = 0;
                 }
-
-                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
+                
+                int counter = 0;
+                final int MINIMUM_SEARCH = 15;
+                while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING))
+                {
+                    //test if bad node
+                    if (counter > MINIMUM_SEARCH && result[0] < 0){
+                        break;
+                    }
+                    
                     IMove testMove = myMoves.get(myIndex);
 
                     GameManager testGameManager = new GameManager(new GameState(currentState));
@@ -195,7 +197,8 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
                     testGameManager.UpdateGame(testMove);
 
                     //while game is not gameover take a random move of the avalible moves
-                    while (testGameManager.getGameOver() == GameManager.GameOverState.Active) {
+                    while (testGameManager.getGameOver() == GameManager.GameOverState.Active)
+                    {
                         List<IMove> avalibleMoves = testGameManager.getCurrentState().getField().getAvailableMoves();
 
                         IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
@@ -209,15 +212,18 @@ public class lessBasicMultiMonteCarloBotOneGroup implements IBot {
                     if (testGameManager.getGameOver() != GameManager.GameOverState.Tie) {
                         if ((((testGameManager.getCurrentState().getMoveNumber() + 1) % 2)) == player) {
                             result[1]++;
-                        } else {
+                        }
+                        else
+                        {
                             result[1]--;
                         }
                     }
                 }
+                
                 return result;
             }
         };
-
+        
         return task;
     }
 

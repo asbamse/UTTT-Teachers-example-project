@@ -145,7 +145,8 @@ public class BasicMonteCarloBotOneGroup implements IBot {
             }
             //searches++;
         }
-        //System.out.println(searches + " random searches where made");
+        System.out.println(
+                " random searches where made");
     }
     
     @Override

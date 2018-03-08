@@ -13,6 +13,7 @@ public class LordBagelMuncher implements IBot{
     public IMove doMove(IGameState state) {
         Random r = new Random();
         List<IMove> validMoves = state.getField().getAvailableMoves();
+        System.out.println("working with bagels");
         return validMoves.get(r.nextInt(validMoves.size()));
     }
 
