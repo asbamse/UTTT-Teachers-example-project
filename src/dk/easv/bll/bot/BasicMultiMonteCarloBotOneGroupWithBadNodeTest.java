@@ -37,7 +37,7 @@ public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
         int player = state.getMoveNumber() % 2;
 
         currentState = new GameState(state);
-        MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 2);
+        MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 5);
         myMoves = state.getField().getAvailableMoves();
 
         results = new ArrayList<>();
@@ -111,13 +111,13 @@ public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
             tasks.add(makeTask(i, player, startTime));
         }
 
-        results = new ArrayList<>(tasks.size());
-
+ 
         for (Task task : tasks)
         {
             new Thread(task).start();
         }
-
+        
+        results = new ArrayList<>(tasks.size());
         for (int j = 0; j < tasks.size(); j++)
         {
             try
@@ -141,7 +141,7 @@ public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
             }
 
         }
-        System.out.println(searches + " random multi searches where made");
+        //System.out.println(searches + " random multi searches where made");
 
     }
 
@@ -162,6 +162,7 @@ public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
     {
         final int myIndex = i;
         final int player = player1;
+        final int MINIMUM_SEARCH = 50;
         Task<Integer[]> task;
         task = new Task<Integer[]>()
         {
@@ -182,7 +183,7 @@ public class BasicMultiMonteCarloBotOneGroupWithBadNodeTest implements IBot
                 }
                 
                 int counter = 0;
-                final int MINIMUM_SEARCH = 15;
+                
                 while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING))
                 {
                     //test if bad node

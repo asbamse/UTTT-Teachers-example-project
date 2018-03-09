@@ -32,7 +32,7 @@ public class BasicMonteCarloBotOneGroup implements IBot {
         int player = state.getMoveNumber() % 2;
         
         currentState = new GameState(state);
-        MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 2);
+        MAX_TIME_FOR_SEARCHING = (currentState.getTimePerMove() - 10);
         myMoves = state.getField().getAvailableMoves();
         
         results = new ArrayList<>(myMoves.size());

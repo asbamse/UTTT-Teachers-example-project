@@ -22,7 +22,7 @@ import javafx.concurrent.Task;
  *
  * @author janvanzetten
  */
-public class BasicMultiMonteCarloBotOneGroup implements IBot
+public class BasicMultiMonteCarloBotOneGroup1 implements IBot
 {
 
     private List<Integer[]> results; //int[0] is total tries int[1] is score 1 for each win 0 for each draw and -1 for each lose
@@ -137,7 +137,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             }
             catch (InterruptedException | ExecutionException ex)
             {
-                Logger.getLogger(BasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BasicMultiMonteCarloBotOneGroup1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -148,7 +148,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
     @Override
     public String getBotName()
     {
-        return "Waste schredder Multi 2000";
+        return "Waste schredder Multi 2000 r";
     }
 
     /**
@@ -167,6 +167,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             @Override
             protected Integer[] call() throws Exception
             {
+                Random random = new Random();
 
                 Integer[] result;
                 try
@@ -193,7 +194,7 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
                     {
                         List<IMove> avalibleMoves = testGameManager.getCurrentState().getField().getAvailableMoves();
 
-                        IMove chossenMove = avalibleMoves.get(selectRandom(avalibleMoves.size()));
+                        IMove chossenMove = avalibleMoves.get(random.nextInt(avalibleMoves.size()));
 
                         testGameManager.UpdateGame(chossenMove);
 
