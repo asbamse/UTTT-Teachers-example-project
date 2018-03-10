@@ -37,6 +37,10 @@ public class BasicMonteCarloBotOneGroup implements IBot {
         
         results = new ArrayList<>(myMoves.size());
         
+        for (int i = 0; i < 81; i++) {
+            results.add(new Integer[2]);
+        }
+        
         fillResults(player, state.getField(), myMoves);
         
         return getBestMove(state);
@@ -97,7 +101,10 @@ public class BasicMonteCarloBotOneGroup implements IBot {
         int i = 0;
         
         while (System.currentTimeMillis() < (startTime + MAX_TIME_FOR_SEARCHING)) {
-            
+            if (i >= myMoves.size()) {
+                i = 0;
+            }
+            //System.out.println(results.size() + "r"  + myMoves.size());
             IMove testMove = myMoves.get(i);
 
             GameManager testGameManager = new GameManager(new GameState(currentState));

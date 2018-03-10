@@ -111,12 +111,16 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             tasks.add(makeTask(i, player, startTime));
         }
 
-        
+        List<Thread> threads =  new ArrayList<>();
 
         for (Task task : tasks)
         {
-            new Thread(task).start();
+            Thread thread = new Thread(task);
+            threads.add(thread);
+            thread.setDaemon(true);
+            thread.start();
         }
+        
         results = new ArrayList<>(tasks.size());
         for (int j = 0; j < tasks.size(); j++)
         {
@@ -141,8 +145,14 @@ public class BasicMultiMonteCarloBotOneGroup implements IBot
             }
 
         }
-        //ystem.out.println(searches + " random multi searches where made");
-
+        //system.out.println(searches + " random multi searches where made");
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BasicMultiMonteCarloBotOneGroup.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
